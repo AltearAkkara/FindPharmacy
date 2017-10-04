@@ -6,13 +6,13 @@ import org.greenrobot.greendao.generator.Schema;
 
 public class MyDAO {
     public static void main(String[] args) {
-        Schema schema = new Schema(1, "com.appsng.greendaoapp.db"); // Your app package name and the (.db) is the folder where the DAO files will be generated into.
+        Schema schema = new Schema(1, "com.atoz.akkaratanapat.daogenerator");
         schema.enableKeepSectionsByDefault();
 
         addTables(schema);
 
         try {
-            new DaoGenerator().generateAll(schema,"./app/src/main/java");
+            new DaoGenerator().generateAll(schema,"../app/src/main/java");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,7 +27,6 @@ public class MyDAO {
     private static Entity addUserEntities(final Schema schema) {
         Entity pharmacy = schema.addEntity("Pharmacy");
         pharmacy.addIdProperty().primaryKey().autoincrement();
-        pharmacy.addIntProperty("pharmacy_id").notNull();
         pharmacy.addStringProperty("name");
         pharmacy.addStringProperty("address");
         pharmacy.addDoubleProperty("lat");

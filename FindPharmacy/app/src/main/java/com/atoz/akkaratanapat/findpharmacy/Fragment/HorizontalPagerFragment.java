@@ -1,7 +1,6 @@
 package com.atoz.akkaratanapat.findpharmacy.Fragment;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,24 +9,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.atoz.akkaratanapat.findpharmacy.Activity.HomeActivity;
 import com.atoz.akkaratanapat.findpharmacy.Adapter.CardAdapter;
-import com.atoz.akkaratanapat.findpharmacy.Model.CardPharmacy;
+import com.atoz.akkaratanapat.findpharmacy.Dialog.CreateDialog;
+import com.atoz.akkaratanapat.findpharmacy.Interface.DialogListener;
+import com.atoz.akkaratanapat.findpharmacy.Dialog.SearchDialog;
 import com.atoz.akkaratanapat.findpharmacy.Model.Pharmacy;
 import com.atoz.akkaratanapat.findpharmacy.R;
-
-import java.util.ArrayList;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 
 /**
- * Created by GIGAMOLE on 8/18/16.
+ * Created by Altear on 8/18/16.
  */
-public class HorizontalPagerFragment extends Fragment {
+public class HorizontalPagerFragment extends Fragment implements DialogListener{
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+    private FloatingActionButton floatingActionButtonSearch,floatingActionButtonCreate;
     private HomeActivity homeActivity;
 
     public static HorizontalPagerFragment newInstance() {
@@ -53,6 +55,26 @@ public class HorizontalPagerFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setCOmponent(view);
+
+    }
+
+    private void setCOmponent(View view){
+        floatingActionButtonSearch = (FloatingActionButton)view.findViewById(R.id.actionSearch);
+        floatingActionButtonCreate = (FloatingActionButton)view.findViewById(R.id.actionAdd);
+        floatingActionButtonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchDialog.show(getContext(),true,HorizontalPagerFragment.this);
+            }
+        });
+        floatingActionButtonCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateDialog.show(getContext(),true,HorizontalPagerFragment.this);
+            }
+        });
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false);
@@ -62,4 +84,28 @@ public class HorizontalPagerFragment extends Fragment {
 
     }
 
+
+    @Override
+    public void onSubmit(String name, Pharmacy pharmacy) {
+        if(name.equals("search")){
+            //find array
+            //find db
+            //pin map
+        }
+        else if(name.equals("create")){
+            //insert db
+            //insert array
+            //pin map
+        }
+    }
+
+    @Override
+    public void onCancel(String name) {
+
+    }
+
+    @Override
+    public void onDismiss(String name) {
+        Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
+    }
 }

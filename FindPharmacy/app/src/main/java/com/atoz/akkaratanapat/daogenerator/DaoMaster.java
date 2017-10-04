@@ -1,4 +1,4 @@
-package com.appsng.greendaoapp.db;
+package com.atoz.akkaratanapat.daogenerator;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

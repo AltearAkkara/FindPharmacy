@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by aa on 9/23/2017.
  */
 
-public class Pharmacy {
+public class MyPharmacy {
 
 //    ร้าน วรวัตน์เภสัช
 //    ที่อยู่	25 ราษฎร์สนาม เมืองอุตรดิตถ์
@@ -22,7 +22,7 @@ public class Pharmacy {
     private String telNumber;
     private String ownerName;
 
-    public Pharmacy(String namePharmacy, String address, LatLng location, String telNumber, String ownerName) {
+    public MyPharmacy(String namePharmacy, String address, LatLng location, String telNumber, String ownerName) {
         this.namePharmacy = namePharmacy;
         this.address = address;
         this.location = location;

@@ -7,5 +7,10 @@
     <color name="colorPrimaryPin">#1E88E5</color>
     <color name="colorPrimaryRad">#551E88E5</color>
 
+    <color name="translucent_bg">#88ffffff</color>
     <color name="white">#ffffff</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="half_black">#808080</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
 </resources>

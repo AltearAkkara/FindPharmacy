@@ -6,19 +6,19 @@ package com.atoz.akkaratanapat.findpharmacy.Model;
 
 public class CardPharmacy {
 
-    private Pharmacy pharmacy;
+    private MyPharmacy pharmacy;
 
-    public CardPharmacy(Pharmacy pharmacy, double distance) {
+    public CardPharmacy(MyPharmacy pharmacy, double distance) {
         this.pharmacy = pharmacy;
         this.distance = distance;
     }
 
-    public Pharmacy getPharmacy() {
+    public MyPharmacy getPharmacy() {
 
         return pharmacy;
     }
 
-    public void setPharmacy(Pharmacy pharmacy) {
+    public void setPharmacy(MyPharmacy pharmacy) {
         this.pharmacy = pharmacy;
     }
 

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardMessageDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:cardBackgroundColor="@color/translucent_bg"
+        app:cardPreventCornerOverlap="true"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:background="@color/colorPrimaryPin">
+
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/messageDialogTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center"
+                    android:textSize="25sp"
+                    android:text="Search"
+                    app:fl_textColor="fl_main"
+                    app:fl_theme="@array/snow" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:background="@color/white">
+
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/messageDialogMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textSize="20sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:text="\tPlease fill a parameter at least 1 field."
+                    app:fl_textColor="fl_main"
+                    app:fl_theme="@array/blood" />
+
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/pharmacyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:hint="\tPharmacy name"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    app:fl_fieldStyle="fl_box"
+                    app:fl_theme="@array/sea" />
+
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/addressEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:hint="\tPharmacy address"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    app:fl_fieldStyle="fl_box"
+                    app:fl_theme="@array/sea" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    >
+                    <com.cengalabs.flatui.views.FlatEditText
+                        android:id="@+id/latEditText"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="20sp"
+                        android:hint="\tlat"
+                        android:text="0"
+                        android:layout_marginEnd="15dp"
+                        app:fl_fieldStyle="fl_box"
+                        app:fl_theme="@array/sea" />
+
+                    <com.cengalabs.flatui.views.FlatEditText
+                        android:id="@+id/lngEditText"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="20sp"
+                        android:hint="\tlng"
+                        android:text="0"
+                        app:fl_fieldStyle="fl_box"
+                        app:fl_theme="@array/sea" />
+                </LinearLayout>
+
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/telEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:textSize="20sp"
+                    android:hint="\tPharmacy tel no."
+                    app:fl_fieldStyle="fl_box"
+                    app:fl_theme="@array/sea" />
+
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/ownerEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:hint="\tPharmacy owner name"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    app:fl_fieldStyle="fl_box"
+                    app:fl_theme="@array/sea" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="15dp"
+
+                    android:gravity="end">
+
+
+                    <com.cengalabs.flatui.views.FlatTextView
+                        android:id="@+id/cancelDialog"
+                        android:layout_width="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="20sp"
+                        android:text="Cancel"
+                        app:fl_textColor="fl_main"
+                        app:fl_theme="@array/sea" />
+
+                    <com.cengalabs.flatui.views.FlatTextView
+                        android:id="@+id/okDialog"
+                        android:layout_width="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textSize="20sp"
+                        android:text="OK"
+                        app:fl_textColor="fl_main"
+                        app:fl_theme="@array/sea"  />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

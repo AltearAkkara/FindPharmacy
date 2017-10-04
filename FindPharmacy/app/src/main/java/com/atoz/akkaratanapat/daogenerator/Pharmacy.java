@@ -1,4 +1,4 @@
-package com.appsng.greendaoapp.db;
+package com.atoz.akkaratanapat.daogenerator;
 
 import org.greenrobot.greendao.annotation.*;
 
@@ -15,7 +15,6 @@ public class Pharmacy {
 
     @Id(autoincrement = true)
     private Long id;
-    private int pharmacy_id;
     private String name;
     private String address;
     private Double lat;
@@ -35,9 +34,8 @@ public class Pharmacy {
     }
 
     @Generated
-    public Pharmacy(Long id, int pharmacy_id, String name, String address, Double lat, Double lng, String number, String owner) {
+    public Pharmacy(Long id, String name, String address, Double lat, Double lng, String number, String owner) {
         this.id = id;
-        this.pharmacy_id = pharmacy_id;
         this.name = name;
         this.address = address;
         this.lat = lat;
@@ -52,14 +50,6 @@ public class Pharmacy {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getPharmacy_id() {
-        return pharmacy_id;
-    }
-
-    public void setPharmacy_id(int pharmacy_id) {
-        this.pharmacy_id = pharmacy_id;
     }
 
     public String getName() {

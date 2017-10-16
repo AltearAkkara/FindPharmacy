@@ -16,7 +16,7 @@ import com.atoz.akkaratanapat.findpharmacy.Adapter.CardAdapter;
 import com.atoz.akkaratanapat.findpharmacy.Dialog.CreateDialog;
 import com.atoz.akkaratanapat.findpharmacy.Interface.DialogListener;
 import com.atoz.akkaratanapat.findpharmacy.Dialog.SearchDialog;
-import com.atoz.akkaratanapat.findpharmacy.Model.Pharmacy;
+import com.atoz.akkaratanapat.findpharmacy.Model.MyPharmacy;
 import com.atoz.akkaratanapat.findpharmacy.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -24,7 +24,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 /**
  * Created by Altear on 8/18/16.
  */
-public class HorizontalPagerFragment extends Fragment implements DialogListener{
+public class HorizontalPagerFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -65,13 +65,13 @@ public class HorizontalPagerFragment extends Fragment implements DialogListener{
         floatingActionButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchDialog.show(getContext(),true,HorizontalPagerFragment.this);
+                SearchDialog.show(getContext(),true,homeActivity);
             }
         });
         floatingActionButtonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateDialog.show(getContext(),true,HorizontalPagerFragment.this);
+                CreateDialog.show(getContext(),true,homeActivity);
             }
         });
 
@@ -79,33 +79,12 @@ public class HorizontalPagerFragment extends Fragment implements DialogListener{
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CardAdapter(homeActivity.dataSet,homeActivity);
+        adapter = new CardAdapter(homeActivity.dataSet,homeActivity,getContext());
         recyclerView.setAdapter(adapter);
 
     }
 
-
-    @Override
-    public void onSubmit(String name, Pharmacy pharmacy) {
-        if(name.equals("search")){
-            //find array
-            //find db
-            //pin map
-        }
-        else if(name.equals("create")){
-            //insert db
-            //insert array
-            //pin map
-        }
-    }
-
-    @Override
-    public void onCancel(String name) {
-
-    }
-
-    @Override
-    public void onDismiss(String name) {
-        Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
+    public void updatCard(){
+        adapter.notifyDataSetChanged();
     }
 }

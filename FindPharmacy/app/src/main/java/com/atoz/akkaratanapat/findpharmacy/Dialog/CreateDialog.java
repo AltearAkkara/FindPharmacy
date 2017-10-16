@@ -8,7 +8,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.atoz.akkaratanapat.findpharmacy.Interface.DialogListener;
-import com.atoz.akkaratanapat.findpharmacy.Model.Pharmacy;
+import com.atoz.akkaratanapat.findpharmacy.Model.MyPharmacy;
 import com.atoz.akkaratanapat.findpharmacy.R;
 import com.cengalabs.flatui.views.FlatEditText;
 import com.cengalabs.flatui.views.FlatTextView;
@@ -64,7 +64,7 @@ public class CreateDialog {
                     Toast.makeText(context,"Please fill all parameter",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    listener.onSubmit("create",new Pharmacy(name.getText().toString(),
+                    listener.onSubmit("Create",new MyPharmacy(name.getText().toString(),
                             address.getText().toString(),
                             new LatLng(Double.parseDouble(lat.getText().toString()),
                                     Double.parseDouble(lng.getText().toString())),

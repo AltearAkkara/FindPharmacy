@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.atoz.akkaratanapat.findpharmacy.Interface.DialogListener;
-import com.atoz.akkaratanapat.findpharmacy.Model.Pharmacy;
+import com.atoz.akkaratanapat.findpharmacy.Model.MyPharmacy;
 import com.atoz.akkaratanapat.findpharmacy.R;
 import com.cengalabs.flatui.views.FlatEditText;
 import com.cengalabs.flatui.views.FlatTextView;
@@ -43,7 +43,9 @@ public class SearchDialog {
         final FlatEditText name = (FlatEditText)dialog.findViewById(R.id.pharmacyEditText);
         final FlatEditText address = (FlatEditText)dialog.findViewById(R.id.addressEditText);
         final FlatEditText lat = (FlatEditText)dialog.findViewById(R.id.latEditText);
+        lat.setVisibility(View.GONE);
         final FlatEditText lng = (FlatEditText)dialog.findViewById(R.id.lngEditText);
+        lng.setVisibility(View.GONE);
         final FlatEditText tel = (FlatEditText)dialog.findViewById(R.id.telEditText);
         final FlatEditText owner = (FlatEditText)dialog.findViewById(R.id.ownerEditText);
 
@@ -53,10 +55,11 @@ public class SearchDialog {
         okDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onSubmit("search",new Pharmacy(name.getText().toString(),
+                String nameInput = "",addressInput = "",telInput = "",ownerInput = "";
+
+                listener.onSubmit("Search",new MyPharmacy(name.getText().toString(),
                         address.getText().toString(),
-                        new LatLng(Double.parseDouble(lat.getText().toString()),
-                                Double.parseDouble(lng.getText().toString())),
+                        new LatLng(0,0),
                         tel.getText().toString(),owner.getText().toString()));
                 dialog.dismiss();
             }

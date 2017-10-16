@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -78,7 +79,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void zoom(LatLng latLng, int index) {
         rad.get(activity.index).setRadius(100);
         rad.get(index).setRadius(300);
-        activity.index = index;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
     }
 
@@ -99,24 +99,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         else{
             mMap.setMyLocationEnabled(true);
         }
+        //mMap.setMyLocationEnabled(true);
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 activity.dataSet.get(0).getPharmacy().getLocation(), 15));
 
         for (int count = 0; count < activity.dataSet.size(); count++) {
-
-
-            Circle circle = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
-                    .getPharmacy().getLocation()).radius(20)
-                    .fillColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryPin)));
-            circle.setStrokeColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryPin));
-            ;
-            Circle circle2 = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
-                    .getPharmacy().getLocation()).radius(100)
-                    .fillColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryRad)));
-            circle2.setStrokeColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryRad));
-            pin.add(circle);
-            rad.add(circle2);
-
+            pin(count);
         }
         rad.get(activity.index).setRadius(300);
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -128,5 +117,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    public void pin(int count){
+        int colour = 0,clourRad = 0;
+        if(activity.dataSet.get(count).getType() == 0){
+            colour = ContextCompat.getColor(getContext(), R.color.colorPrimaryPin);
+            clourRad = ContextCompat.getColor(getContext(), R.color.colorPrimaryRad);
+        }else {
+            colour = ContextCompat.getColor(getContext(), R.color.colorSecondaryPin);
+            clourRad = ContextCompat.getColor(getContext(), R.color.colorSecondaryRad);
+        }
+        Circle circle = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
+                .getPharmacy().getLocation()).radius(20)
+                .fillColor(colour));
+        circle.setStrokeColor(colour);
+        ;
+        Circle circle2 = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
+                .getPharmacy().getLocation()).radius(100)
+                .fillColor(clourRad));
+        circle2.setStrokeColor(clourRad);
+        pin.add(circle);
+        rad.add(circle2);
+    }
 
 }

@@ -6,16 +6,29 @@ package com.atoz.akkaratanapat.findpharmacy.Model;
 
 public class CardPharmacy {
 
+    private long id;
     private MyPharmacy pharmacy;
+    private double distance;
+    private int type;
 
-    public CardPharmacy(MyPharmacy pharmacy, double distance) {
+    public CardPharmacy(long id,MyPharmacy pharmacy, double distance,int type) {
+        this.id = id;
         this.pharmacy = pharmacy;
         this.distance = distance;
+        this.type = type;
     }
 
     public MyPharmacy getPharmacy() {
 
         return pharmacy;
+    }
+
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public long getId(){
+        return this.id;
     }
 
     public void setPharmacy(MyPharmacy pharmacy) {
@@ -30,5 +43,11 @@ public class CardPharmacy {
         this.distance = distance;
     }
 
-    private double distance;
+    public void setType(int type){
+        this.type = type;
+    }
+
+    public int getType(){
+        return this.type;
+    }
 }

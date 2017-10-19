@@ -37,7 +37,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private HomeActivity activity;
-    private ArrayList<Circle> pin = new ArrayList<>(), rad = new ArrayList<>();
+    public ArrayList<Circle> pin = new ArrayList<>(), rad = new ArrayList<>();
 
 
     public static MapFragment newInstance() {
@@ -77,9 +77,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void zoom(LatLng latLng, int index) {
-        rad.get(activity.index).setRadius(100);
-        rad.get(index).setRadius(300);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        rad.get(activity.index).setRadius(250);
+        rad.get(index).setRadius(750);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(activity.dataSet.get(index)
+                .getPharmacy().getLocation(), 13));
     }
 
     @Override
@@ -99,15 +100,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         else{
             mMap.setMyLocationEnabled(true);
         }
-        //mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                activity.dataSet.get(0).getPharmacy().getLocation(), 15));
+                new LatLng(13.766, 100.605), 14));
+//        mMap.addCircle(new CircleOptions().center(new LatLng(13.766,100.605)).radius(10000)
+//                .fillColor(ContextCompat.getColor(getContext(), R.color.colorSecondaryRad)));
 
-        for (int count = 0; count < activity.dataSet.size(); count++) {
-            pin(count);
-        }
-        rad.get(activity.index).setRadius(300);
+
+//        for (int count = 0; count < activity.dataSet.size(); count++) {
+//            pin(count);
+//        }
+//        if(rad.size()>0){
+//            rad.get(activity.index).setRadius(750);
+//        }
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -118,25 +125,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void pin(int count){
-        int colour = 0,clourRad = 0;
+        int colour,colourRad;
         if(activity.dataSet.get(count).getType() == 0){
             colour = ContextCompat.getColor(getContext(), R.color.colorPrimaryPin);
-            clourRad = ContextCompat.getColor(getContext(), R.color.colorPrimaryRad);
+            colourRad = ContextCompat.getColor(getContext(), R.color.colorPrimaryRad);
         }else {
             colour = ContextCompat.getColor(getContext(), R.color.colorSecondaryPin);
-            clourRad = ContextCompat.getColor(getContext(), R.color.colorSecondaryRad);
+            colourRad = ContextCompat.getColor(getContext(), R.color.colorSecondaryRad);
         }
         Circle circle = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
-                .getPharmacy().getLocation()).radius(20)
+                .getPharmacy().getLocation()).radius(50)
                 .fillColor(colour));
         circle.setStrokeColor(colour);
-        ;
+
         Circle circle2 = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
-                .getPharmacy().getLocation()).radius(100)
-                .fillColor(clourRad));
-        circle2.setStrokeColor(clourRad);
-        pin.add(circle);
-        rad.add(circle2);
+                .getPharmacy().getLocation()).radius(250)
+                .fillColor(colourRad));
+        circle2.setStrokeColor(colourRad);
+        while(pin.size() < activity.dataSet.size()){
+                rad.add(null);
+                pin.add(null);
+        }
+        pin.set(count,circle) ;
+        rad.set(count,circle2);
     }
 
 }

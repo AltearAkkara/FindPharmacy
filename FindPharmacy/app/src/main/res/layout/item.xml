@@ -45,7 +45,8 @@
                     android:layout_gravity="center"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:textSize="20dp"
+                    android:padding="10dp"
+                    android:textSize="15sp"
                     android:textColor="@color/colorPrimaryPin"
                     />
 
@@ -58,7 +59,26 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimaryPin"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/colorPrimaryPin"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
                 android:textColor="@color/colorPrimaryPin"
                 android:text="TextView" />
 

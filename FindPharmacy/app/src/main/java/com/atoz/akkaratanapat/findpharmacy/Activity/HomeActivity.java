@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.atoz.akkaratanapat.daogenerator.DaoSession;
 import com.atoz.akkaratanapat.daogenerator.Pharmacy;
 import com.atoz.akkaratanapat.daogenerator.PharmacyDao;
+import com.atoz.akkaratanapat.findpharmacy.APIHandle;
 import com.atoz.akkaratanapat.findpharmacy.Dialog.InfoDialog;
 import com.atoz.akkaratanapat.findpharmacy.Fragment.HorizontalPagerFragment;
 import com.atoz.akkaratanapat.findpharmacy.Fragment.MapFragment;
@@ -43,20 +46,29 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements OnCardClickListener, OnMarkerClickListener
-        , DialogListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+import okhttp3.ResponseBody;
 
-    double myLat = 0,myLng = 0;
+public class HomeActivity extends AppCompatActivity implements OnCardClickListener, OnMarkerClickListener
+        , DialogListener, LocationListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, APIHandle.ApiHandlerListener {
+
+    public double myLat = 0, myLng = 0;
     public ArrayList<CardPharmacy> dataSet = new ArrayList<>();
     public int index = 0;
     private PharmacyDao pharmacyDao;
     private static final int REQUEST_PHONE_CALL = 1;
     private GoogleApiClient googleApiClient;
+    private APIHandle apiHandle;
+    Location currentLocation = new Location("current");
 
 
     @Override
@@ -65,11 +77,16 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
         setContentView(R.layout.activity_home);
         setActionbar();
         setGreenDAO(HomeActivity.this);
-//        LatLng sydney =  new LatLng(-33.867834,151.207760);
-//        addPharmacyDao(new MyPharmacy("Pharmacy#2","Somewhere",sydney,"081234567","Someone"));
+        //LatLng sydney =  new LatLng(-33.867834,151.207760);
+        //addPharmacyDao(new MyPharmacy("Pharmacy#1","Somewhere",sydney,"081234567","Someone"));
         setGoogleApiClient();
         initPhone();
+        //getLocationFromAddress(getApplicationContext(),"50/1 หมู่ที่ 10, ตำบลเหมืองแดง อำเภอแม่สาย จังหวัดเชียงราย, 73130");
         //loadPharmacyAll();
+        apiHandle = new APIHandle(this);
+        apiHandle.setApiHandlerListener(this);
+
+        loadPharmacyAll();
         if (savedInstanceState == null) {
 //            changeFragment("map");
 //            changeFragment("card");
@@ -78,7 +95,35 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     }
 
-    private void setActionbar(){
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            } else if (address.size() == 0) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+        }
+
+        return p1;
+    }
+
+    private void setActionbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
@@ -88,11 +133,11 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
         toolbar.setTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
     }
 
-    private void initPhone(){
+    private void initPhone() {
         PhoneCallListener phoneListener = new PhoneCallListener();
         TelephonyManager telephonyManager = (TelephonyManager) this
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(phoneListener,PhoneStateListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
 
     private void setGoogleApiClient() {
@@ -110,93 +155,98 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
         pharmacyDao = daoSession.getPharmacyDao();
     }
 
-    public void loadPharmacyAll(){
+    public void loadPharmacyAll() {
         QueryBuilder<Pharmacy> userQueryBuilder = pharmacyDao.queryBuilder();
 //        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(myLat - 0.025,myLat + 0.025)
 //                ,PharmacyDao.Properties.Lng.between(myLng - 0.075,myLng + 0.075));
-        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(-90,90)
-                ,PharmacyDao.Properties.Lng.between(-180,180));
+        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(-90, 90)
+                , PharmacyDao.Properties.Lng.between(-180, 180));
         List<Pharmacy> pharmacies = userQueryBuilder.list();
         initDataset(pharmacies);
     }
 
-    public void loadPharmacy(MyPharmacy myPharmacy){
+    public void loadPharmacy(MyPharmacy myPharmacy) {
         //find dataSet
         //find db if id is not match add to dataset
         QueryBuilder<Pharmacy> userQueryBuilder = pharmacyDao.queryBuilder();
         userQueryBuilder.where(PharmacyDao.Properties.Name.eq(myPharmacy.getNamePharmacy())).
                 or(PharmacyDao.Properties.Address.eq(myPharmacy.getAddress()),
-                userQueryBuilder.or(PharmacyDao.Properties.Number.eq(myPharmacy.getTelNumber()),
-                PharmacyDao.Properties.Owner.eq(myPharmacy.getOwnerName())));
+                        userQueryBuilder.or(PharmacyDao.Properties.Number.eq(myPharmacy.getTelNumber()),
+                                PharmacyDao.Properties.Owner.eq(myPharmacy.getOwnerName())));
         List<Pharmacy> pharmacies = userQueryBuilder.list();
         updateDataset(pharmacies);
     }
 
     public void addPharmacyDao(MyPharmacy myPharmacy) {
-        Pharmacy pharmacy = new Pharmacy(null,myPharmacy.getNamePharmacy(),
-                myPharmacy.getAddress(),myPharmacy.getLocation().latitude,
-                myPharmacy.getLocation().longitude,myPharmacy.getTelNumber(),myPharmacy.getOwnerName());
+        Pharmacy pharmacy = new Pharmacy(null, myPharmacy.getNamePharmacy(),
+                myPharmacy.getAddress(), myPharmacy.getLocation().latitude,
+                myPharmacy.getLocation().longitude, myPharmacy.getTelNumber(), myPharmacy.getOwnerName());
         pharmacyDao.insert(pharmacy);
     }
 
-    public void deletePharmaDao(long id){
+    public void deletePharmaDao(long id) {
         pharmacyDao.deleteByKey(id);
 
     }
 
     public void changeFragment(String fragmentName) {
-         if (fragmentName.equals("map")) {
+        if (fragmentName.equals("map")) {
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_right_out)
                     .replace(R.id.container, MapFragment.newInstance(), fragmentName)
                     .addToBackStack(null)
                     .commit();
         }
-         if (fragmentName.equals("card")) {
-             getSupportFragmentManager().beginTransaction()
-                     .setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_right_out)
-                     .replace(R.id.containerCard, HorizontalPagerFragment.newInstance(), fragmentName)
-                     .addToBackStack(null)
-                     .commit();
-         }
+        if (fragmentName.equals("card")) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.push_right_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_right_out)
+                    .replace(R.id.containerCard, HorizontalPagerFragment.newInstance(), fragmentName)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
-    private void initDataset(List<Pharmacy> pharmacies){
-        Location currentLocation = new Location("current");
-        currentLocation.setLatitude(myLat);
-        currentLocation.setLongitude(myLng);
-        for (Pharmacy pharmacy : pharmacies) {
-            long id = pharmacy.getId();
-            String name = pharmacy.getName();
-            String address = pharmacy.getAddress();
-            String tel = pharmacy.getNumber();
-            double lat = pharmacy.getLat();
-            double lng = pharmacy.getLng();
-            String owner = pharmacy.getOwner();
-            LatLng location = new LatLng(lat,lng);
-            Location phamaLocation = new Location("");
-            phamaLocation.setLatitude(lat);
-            phamaLocation.setLongitude(lng);
-            dataSet.add(new CardPharmacy(id,new MyPharmacy(name,address,location,
-                    tel,owner),currentLocation.distanceTo(phamaLocation),0));
-        }
+    private void initDataset(List<Pharmacy> pharmacies) {
 
-        LatLng sydney =  new LatLng(-33.867834,151.207760);
-        LatLng sydney2 =  new LatLng(-33.877749,151.186506);
-        LatLng sydney3 =  new LatLng(-33.865626,151.193621);
-        LatLng sydney4 =  new LatLng(-33.872987,151.198806);
+        currentLocation.setLatitude(13.766);
+        currentLocation.setLongitude(100.605);
 
-        Toast.makeText(getApplicationContext(),"Found" + pharmacies.size() + "places",Toast.LENGTH_SHORT).show();
+        changeFragment("map");
+        changeFragment("card");
+
+        apiHandle.requestNearbyPlace(13.766, 100.605, 9500);
+//        for (Pharmacy pharmacy : pharmacies) {
+//            long id = pharmacy.getId();
+//            String name = pharmacy.getName();
+//            String address = pharmacy.getAddress();
+//            String tel = pharmacy.getNumber();
+//            double lat = pharmacy.getLat();
+//            double lng = pharmacy.getLng();
+//            String owner = pharmacy.getOwner();
+//            LatLng location = new LatLng(lat, lng);
+//            Location phamaLocation = new Location("");
+//            phamaLocation.setLatitude(lat);
+//            phamaLocation.setLongitude(lng);
+//
+//            dataSet.add(new CardPharmacy(id, new MyPharmacy(name, address, location,
+//                    tel, owner), currentLocation.distanceTo(phamaLocation) / 1000, 0));
+//        }
+
+        LatLng sydney = new LatLng(-33.867834, 151.207760);
+        LatLng sydney2 = new LatLng(-33.877749, 151.186506);
+        LatLng sydney3 = new LatLng(-33.865626, 151.193621);
+        LatLng sydney4 = new LatLng(-33.872987, 151.198806);
+
+        //Toast.makeText(getApplicationContext(), "Found" + pharmacies.size() + "places", Toast.LENGTH_SHORT).show();
 //        dataSet.add(new CardPharmacy(new MyPharmacy("Pharmacy#1","Somewhere",sydney,"081234567","Someone"),0.7,0));
 //        dataSet.add(new CardPharmacy(new MyPharmacy("Pharmacy#2","Somewhere2",sydney2,"081234567","Someone"),0.80,0));
 //        dataSet.add(new CardPharmacy(new MyPharmacy("Pharmacy#3","Somewhere3",sydney3,"081234567","Someone"),0.90,1));
 //        dataSet.add(new CardPharmacy(new MyPharmacy("Pharmacy#4","Somewhere4",sydney4,"081234567","Someone"),1,1));
 
-        changeFragment("map");
-        changeFragment("card");
+
     }
 
-    private void updateDataset(List<Pharmacy> pharmacies){
+    private void updateDataset(List<Pharmacy> pharmacies) {
         Location currentLocation = new Location("current");
         currentLocation.setLatitude(myLat);
         currentLocation.setLongitude(myLng);
@@ -209,55 +259,57 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
             double lat = pharmacy.getLat();
             double lng = pharmacy.getLng();
             String owner = pharmacy.getOwner();
-            LatLng location = new LatLng(lat,lng);
+            LatLng location = new LatLng(lat, lng);
             Location phamaLocation = new Location("");
             phamaLocation.setLatitude(lat);
             phamaLocation.setLongitude(lng);
-            if(findIdInDataSet(id)){
-                dataSet.add(new CardPharmacy(id,new MyPharmacy(name,address,location,
-                        tel,owner),currentLocation.distanceTo(phamaLocation),1));
-                FragmentManager fm = getSupportFragmentManager();
-                MapFragment mapFragment = (MapFragment) fm.findFragmentByTag("map");
+
+            FragmentManager fm = getSupportFragmentManager();
+            MapFragment mapFragment = (MapFragment) fm.findFragmentByTag("map");
+            HorizontalPagerFragment horizontalPagerFragment = (HorizontalPagerFragment) fm.findFragmentByTag("card");
+
+            if (findIdInDataSet(id)) {
+                dataSet.add(new CardPharmacy(id, new MyPharmacy(name, address, location,
+                        tel, owner), currentLocation.distanceTo(phamaLocation), 1));
+
                 if (mapFragment != null) {
                     mapFragment.pin(dataSet.size() - 1);
                 }
-                HorizontalPagerFragment horizontalPagerFragment = (HorizontalPagerFragment) fm.findFragmentByTag("card");
-                if(horizontalPagerFragment != null){
+
+                if (horizontalPagerFragment != null) {
                     horizontalPagerFragment.updatCard();
                 }
 
             }
         }
-        if(pharmacies.size() == 0){
-            Toast.makeText(getApplicationContext(),"Not found",Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(),"Found " + pharmacies.size() + "places",Toast.LENGTH_SHORT).show();
+        if (pharmacies.size() == 0) {
+            Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Found " + pharmacies.size() + "places", Toast.LENGTH_SHORT).show();
             //update
         }
 
     }
 
-    public boolean findIdInDataSet(long id){
+    public boolean findIdInDataSet(long id) {
         boolean result = true;
-        for(int index = 0;index <  dataSet.size();index++){
-            if(dataSet.get(index).getId() == id){
+        for (int index = 0; index < dataSet.size(); index++) {
+            if (dataSet.get(index).getId() == id) {
                 result = false;
+                Toast.makeText(getApplicationContext(),
+                        "That pharmacy where you want to find already have in data set.", Toast.LENGTH_SHORT).show();
             }
         }
-        Toast.makeText(getApplicationContext(),
-                "That pharmacy where you want to find already have in data set.",Toast.LENGTH_SHORT).show();
         return result;
     }
 
     @Override
     public void onSubmit(String name, MyPharmacy mypharmacy) {
-        if(name.equals("Call")){
+        if (name.equals("Call")) {
             phoneCall(mypharmacy.getTelNumber());
-        }
-        else if(name.equals("Create")){
+        } else if (name.equals("Create")) {
             addPharmacyDao(mypharmacy);
-        }
-        else if(name.equals("Search")){
+        } else if (name.equals("Search")) {
             loadPharmacy(mypharmacy);
         }
     }
@@ -274,17 +326,17 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     @Override
     public void onCardClick(int index) {
-        if(this.index != index){
-            Toast.makeText(getApplicationContext(),index+"",Toast.LENGTH_SHORT).show();
+        if (this.index != index) {
+            Toast.makeText(getApplicationContext(), index + "", Toast.LENGTH_SHORT).show();
             FragmentManager fm = getSupportFragmentManager();
-            MapFragment fragment = (MapFragment) fm.findFragmentByTag("map");
-            fragment.zoom(dataSet.get(index).getPharmacy().getLocation(),index);
-            //set colour selector
-
+            MapFragment mapFragment = (MapFragment) fm.findFragmentByTag("map");
+            if (mapFragment != null) {
+                mapFragment.zoom(dataSet.get(index).getPharmacy().getLocation(), index);
+            }
             this.index = index;
-        } else{
-            Toast.makeText(getApplicationContext(),index+" dialog show up",Toast.LENGTH_SHORT).show();
-            InfoDialog.show(HomeActivity.this,true,dataSet.get(index),this);
+        } else {
+            Toast.makeText(getApplicationContext(), index + " dialog show up", Toast.LENGTH_SHORT).show();
+            InfoDialog.show(HomeActivity.this, true, dataSet.get(index), this);
         }
 
     }
@@ -294,21 +346,17 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     }
 
-    public void phoneCall(String telNo){
+    public void phoneCall(String telNo) {
 
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + telNo));
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-            }
-            else
-            {
+                ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+            } else {
                 startActivity(intent);
             }
-        }
-        else
-        {
+        } else {
             startActivity(intent);
         }
     }
@@ -320,9 +368,7 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
             case REQUEST_PHONE_CALL: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                }
-                else
-                {
+                } else {
 
                 }
                 return;
@@ -332,7 +378,7 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     @Override
     public void onLocationChanged(Location location) {
-        if(myLat == 0 | myLng == 0) {
+        if (myLat == 0 | myLng == 0) {
             myLat = location.getLatitude();
             myLng = location.getLongitude();
             HomeActivity.this.runOnUiThread(new Runnable() {
@@ -379,6 +425,85 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onSuccess(String name, final int index, JSONObject json) throws JSONException {
+        JSONObject response = json;
+        String status = response.getString("status");
+        if (status.equals("OK")) {
+            if (name.equals(APIHandle.APIName.Nearby.toString())) {
+                JSONArray result = response.getJSONArray("results");
+                for (int count = 0; count < result.length(); count++) {
+                    JSONObject location = result.getJSONObject(count).getJSONObject("geometry").getJSONObject("location");
+                    double lat = location.getDouble("lat");
+                    double lng = location.getDouble("lng");
+                    String pharmacyName = result.getJSONObject(count).getString("name");
+                    String placeID = result.getJSONObject(count).getString("place_id");
+                    String address = result.getJSONObject(count).getString("vicinity");
+                    Location phamaLocation = new Location("");
+                    phamaLocation.setLatitude(lat);
+                    phamaLocation.setLongitude(lng);
+                    dataSet.add(new CardPharmacy(-1, new MyPharmacy(pharmacyName, address, new LatLng(lat, lng),
+                            "", "Someone"), currentLocation.distanceTo(phamaLocation), 0));
+
+                    apiHandle.requestPlaceDetail(count, placeID);
+                }
+
+            } else if (name.equals(APIHandle.APIName.Detail.toString())) {
+                JSONObject result = response.getJSONObject("result");
+                String tel = result.getString("international_phone_number");
+                String[] tempNumber = tel.split(" ");
+                dataSet.get(index).getPharmacy().setTelNumber("0" + tempNumber[1] + tempNumber[2] + tempNumber[3]);
+                FragmentManager fm = getSupportFragmentManager();
+                final HorizontalPagerFragment horizontalPagerFragment = (HorizontalPagerFragment) fm.findFragmentByTag("card");
+
+                final MapFragment mapFragment = (MapFragment) fm.findFragmentByTag("map");
+
+                if (mapFragment != null) {
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mapFragment.pin(index);
+                        }
+                    });
+                }
+
+                if (horizontalPagerFragment != null) {
+                    HomeActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            horizontalPagerFragment.updatCard();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onBodyError(ResponseBody responseBodyError) {
+
+    }
+
+    @Override
+    public void onBodyErrorIsNull() {
+
+    }
+
+    @Override
+    public void onFailure(String name, String url, String param, Exception e) {
+
+    }
+
+    @Override
+    public void onStartLoading() {
+
+    }
+
+    @Override
+    public void onFinishLoading() {
 
     }
 

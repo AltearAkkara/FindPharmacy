@@ -15,6 +15,7 @@ import com.atoz.akkaratanapat.findpharmacy.Interface.OnCardClickListener;
 import com.atoz.akkaratanapat.findpharmacy.Model.CardPharmacy;
 import com.atoz.akkaratanapat.findpharmacy.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -48,11 +49,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         if(dataSet.get(position).getType() == 1){
             holder.textName.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
             holder.textAddress.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
+            holder.textNumber.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
+            holder.textOwner.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
             holder.textDistance.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
         }
         holder.textName.setText(dataSet.get(position).getPharmacy().getNamePharmacy());
-        holder.textAddress.setText(dataSet.get(position).getPharmacy().getAddress());
-        holder.textDistance.setText(dataSet.get(position).getDistance() + " KM.");
+        if(dataSet.get(position).getPharmacy().getAddress().length() > 19){
+            holder.textAddress.setText(dataSet.get(position).getPharmacy().getAddress().substring(0,20) + "...");
+        }
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        holder.textNumber.setText(dataSet.get(position).getPharmacy().getTelNumber());
+        holder.textOwner.setText(dataSet.get(position).getPharmacy().getOwnerName());
+        holder.textDistance.setText(df.format(dataSet.get(position).getDistance()/1000) + " KM.");
 
         holder.myCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +90,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
         RelativeLayout header;
         CardView myCardView;
-        TextView textName, textAddress, textDistance;
+        TextView textName, textAddress,textNumber,textOwner, textDistance;
 
         ViewHolder(final View itemView) {
             super(itemView);
@@ -89,6 +98,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             header = (RelativeLayout) itemView.findViewById(R.id.header);
             textName = (TextView) itemView.findViewById(R.id.name);
             textAddress = (TextView) itemView.findViewById(R.id.address);
+            textNumber = (TextView)itemView.findViewById(R.id.number);
+            textOwner = (TextView)itemView.findViewById(R.id.owner);
             textDistance = (TextView) itemView.findViewById(R.id.distance);
 
 //            itemView.setOnClickListener(new View.OnClickListener() {

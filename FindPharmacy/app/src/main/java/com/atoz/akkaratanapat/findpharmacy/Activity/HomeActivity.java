@@ -157,10 +157,10 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     public void loadPharmacyAll() {
         QueryBuilder<Pharmacy> userQueryBuilder = pharmacyDao.queryBuilder();
-//        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(myLat - 0.025,myLat + 0.025)
-//                ,PharmacyDao.Properties.Lng.between(myLng - 0.075,myLng + 0.075));
-        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(-90, 90)
-                , PharmacyDao.Properties.Lng.between(-180, 180));
+        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(myLat - 0.025,myLat + 0.025)
+                ,PharmacyDao.Properties.Lng.between(myLng - 0.075,myLng + 0.075));
+//        userQueryBuilder.where(PharmacyDao.Properties.Lat.between(-90, 90)
+//                , PharmacyDao.Properties.Lng.between(-180, 180));
         List<Pharmacy> pharmacies = userQueryBuilder.list();
         initDataset(pharmacies);
     }
@@ -208,34 +208,36 @@ public class HomeActivity extends AppCompatActivity implements OnCardClickListen
 
     private void initDataset(List<Pharmacy> pharmacies) {
 
-        currentLocation.setLatitude(13.766);
-        currentLocation.setLongitude(100.605);
+        currentLocation.setLatitude(myLat);
+        currentLocation.setLongitude(myLng);
 
         changeFragment("map");
         changeFragment("card");
 
-        apiHandle.requestNearbyPlace(13.766, 100.605, 9500);
-//        for (Pharmacy pharmacy : pharmacies) {
-//            long id = pharmacy.getId();
-//            String name = pharmacy.getName();
-//            String address = pharmacy.getAddress();
-//            String tel = pharmacy.getNumber();
-//            double lat = pharmacy.getLat();
-//            double lng = pharmacy.getLng();
-//            String owner = pharmacy.getOwner();
-//            LatLng location = new LatLng(lat, lng);
-//            Location phamaLocation = new Location("");
-//            phamaLocation.setLatitude(lat);
-//            phamaLocation.setLongitude(lng);
-//
-//            dataSet.add(new CardPharmacy(id, new MyPharmacy(name, address, location,
-//                    tel, owner), currentLocation.distanceTo(phamaLocation) / 1000, 0));
-//        }
+        for (Pharmacy pharmacy : pharmacies) {
+            long id = pharmacy.getId();
+            String name = pharmacy.getName();
+            String address = pharmacy.getAddress();
+            String tel = pharmacy.getNumber();
+            double lat = pharmacy.getLat();
+            double lng = pharmacy.getLng();
+            String owner = pharmacy.getOwner();
+            LatLng location = new LatLng(lat, lng);
+            Location phamaLocation = new Location("");
+            phamaLocation.setLatitude(lat);
+            phamaLocation.setLongitude(lng);
 
-        LatLng sydney = new LatLng(-33.867834, 151.207760);
-        LatLng sydney2 = new LatLng(-33.877749, 151.186506);
-        LatLng sydney3 = new LatLng(-33.865626, 151.193621);
-        LatLng sydney4 = new LatLng(-33.872987, 151.198806);
+            dataSet.add(new CardPharmacy(id, new MyPharmacy(name, address, location,
+                    tel, owner), currentLocation.distanceTo(phamaLocation) / 1000, 1));
+        }
+
+        apiHandle.requestNearbyPlace(myLat, myLng, 9500);
+
+
+//        LatLng sydney = new LatLng(-33.867834, 151.207760);
+//        LatLng sydney2 = new LatLng(-33.877749, 151.186506);
+//        LatLng sydney3 = new LatLng(-33.865626, 151.193621);
+//        LatLng sydney4 = new LatLng(-33.872987, 151.198806);
 
         //Toast.makeText(getApplicationContext(), "Found" + pharmacies.size() + "places", Toast.LENGTH_SHORT).show();
 //        dataSet.add(new CardPharmacy(new MyPharmacy("Pharmacy#1","Somewhere",sydney,"081234567","Someone"),0.7,0));

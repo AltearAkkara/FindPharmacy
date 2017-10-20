@@ -77,8 +77,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void zoom(LatLng latLng, int index) {
-        rad.get(activity.index).setRadius(250);
-        rad.get(index).setRadius(750);
+        rad.get(activity.index).setRadius(1000);
+        rad.get(index).setRadius(3000);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(activity.dataSet.get(index)
                 .getPharmacy().getLocation(), 13));
     }
@@ -103,7 +103,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.setMyLocationEnabled(true);
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(13.766, 100.605), 14));
+                new LatLng(activity.myLat, activity.myLng), 13));
 //        mMap.addCircle(new CircleOptions().center(new LatLng(13.766,100.605)).radius(10000)
 //                .fillColor(ContextCompat.getColor(getContext(), R.color.colorSecondaryRad)));
 
@@ -134,12 +134,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             colourRad = ContextCompat.getColor(getContext(), R.color.colorSecondaryRad);
         }
         Circle circle = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
-                .getPharmacy().getLocation()).radius(50)
+                .getPharmacy().getLocation()).radius(150)
                 .fillColor(colour));
         circle.setStrokeColor(colour);
 
         Circle circle2 = mMap.addCircle(new CircleOptions().center(activity.dataSet.get(count)
-                .getPharmacy().getLocation()).radius(250)
+                .getPharmacy().getLocation()).radius(1000)
                 .fillColor(colourRad));
         circle2.setStrokeColor(colourRad);
         while(pin.size() < activity.dataSet.size()){

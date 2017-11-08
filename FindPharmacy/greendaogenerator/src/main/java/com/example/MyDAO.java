@@ -29,11 +29,12 @@ public class MyDAO {
         pharmacy.addIdProperty().primaryKey().autoincrement();
         pharmacy.addStringProperty("name");
         pharmacy.addStringProperty("address");
+        pharmacy.addStringProperty("province");
+        pharmacy.addStringProperty("district");
         pharmacy.addDoubleProperty("lat");
         pharmacy.addDoubleProperty("lng");
         pharmacy.addStringProperty("number");
         pharmacy.addStringProperty("owner");
-
         return pharmacy;
     }
 }

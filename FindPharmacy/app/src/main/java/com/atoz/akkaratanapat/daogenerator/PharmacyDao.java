@@ -25,10 +25,12 @@ public class PharmacyDao extends AbstractDao<Pharmacy, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Address = new Property(2, String.class, "address", false, "ADDRESS");
-        public final static Property Lat = new Property(3, Double.class, "lat", false, "LAT");
-        public final static Property Lng = new Property(4, Double.class, "lng", false, "LNG");
-        public final static Property Number = new Property(5, String.class, "number", false, "NUMBER");
-        public final static Property Owner = new Property(6, String.class, "owner", false, "OWNER");
+        public final static Property Province = new Property(3, String.class, "province", false, "PROVINCE");
+        public final static Property District = new Property(4, String.class, "district", false, "DISTRICT");
+        public final static Property Lat = new Property(5, Double.class, "lat", false, "LAT");
+        public final static Property Lng = new Property(6, Double.class, "lng", false, "LNG");
+        public final static Property Number = new Property(7, String.class, "number", false, "NUMBER");
+        public final static Property Owner = new Property(8, String.class, "owner", false, "OWNER");
     }
 
 
@@ -47,10 +49,12 @@ public class PharmacyDao extends AbstractDao<Pharmacy, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT," + // 1: name
                 "\"ADDRESS\" TEXT," + // 2: address
-                "\"LAT\" REAL," + // 3: lat
-                "\"LNG\" REAL," + // 4: lng
-                "\"NUMBER\" TEXT," + // 5: number
-                "\"OWNER\" TEXT);"); // 6: owner
+                "\"PROVINCE\" TEXT," + // 3: province
+                "\"DISTRICT\" TEXT," + // 4: district
+                "\"LAT\" REAL," + // 5: lat
+                "\"LNG\" REAL," + // 6: lng
+                "\"NUMBER\" TEXT," + // 7: number
+                "\"OWNER\" TEXT);"); // 8: owner
     }
 
     /** Drops the underlying database table. */
@@ -78,24 +82,34 @@ public class PharmacyDao extends AbstractDao<Pharmacy, Long> {
             stmt.bindString(3, address);
         }
  
+        String province = entity.getProvince();
+        if (province != null) {
+            stmt.bindString(4, province);
+        }
+ 
+        String district = entity.getDistrict();
+        if (district != null) {
+            stmt.bindString(5, district);
+        }
+ 
         Double lat = entity.getLat();
         if (lat != null) {
-            stmt.bindDouble(4, lat);
+            stmt.bindDouble(6, lat);
         }
  
         Double lng = entity.getLng();
         if (lng != null) {
-            stmt.bindDouble(5, lng);
+            stmt.bindDouble(7, lng);
         }
  
         String number = entity.getNumber();
         if (number != null) {
-            stmt.bindString(6, number);
+            stmt.bindString(8, number);
         }
  
         String owner = entity.getOwner();
         if (owner != null) {
-            stmt.bindString(7, owner);
+            stmt.bindString(9, owner);
         }
     }
 
@@ -118,24 +132,34 @@ public class PharmacyDao extends AbstractDao<Pharmacy, Long> {
             stmt.bindString(3, address);
         }
  
+        String province = entity.getProvince();
+        if (province != null) {
+            stmt.bindString(4, province);
+        }
+ 
+        String district = entity.getDistrict();
+        if (district != null) {
+            stmt.bindString(5, district);
+        }
+ 
         Double lat = entity.getLat();
         if (lat != null) {
-            stmt.bindDouble(4, lat);
+            stmt.bindDouble(6, lat);
         }
  
         Double lng = entity.getLng();
         if (lng != null) {
-            stmt.bindDouble(5, lng);
+            stmt.bindDouble(7, lng);
         }
  
         String number = entity.getNumber();
         if (number != null) {
-            stmt.bindString(6, number);
+            stmt.bindString(8, number);
         }
  
         String owner = entity.getOwner();
         if (owner != null) {
-            stmt.bindString(7, owner);
+            stmt.bindString(9, owner);
         }
     }
 
@@ -150,10 +174,12 @@ public class PharmacyDao extends AbstractDao<Pharmacy, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // address
-            cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3), // lat
-            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4), // lng
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // number
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // owner
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // province
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // district
+            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // lat
+            cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6), // lng
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // number
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // owner
         );
         return entity;
     }
@@ -163,10 +189,12 @@ public class PharmacyDao extends AbstractDao<Pharmacy, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setAddress(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setLat(cursor.isNull(offset + 3) ? null : cursor.getDouble(offset + 3));
-        entity.setLng(cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4));
-        entity.setNumber(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setOwner(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setProvince(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setDistrict(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setLat(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
+        entity.setLng(cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6));
+        entity.setNumber(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setOwner(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override

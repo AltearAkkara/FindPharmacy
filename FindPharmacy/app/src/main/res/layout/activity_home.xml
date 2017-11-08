@@ -34,9 +34,18 @@
         android:id="@+id/toolbar_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:popupTheme="@style/MyDarkToolbarStyle" />
+        android:background="@color/colorPrimary"
+        style="@style/MyDarkToolbarStyle" />
+    <!--app:popupTheme="@style/MyDarkToolbarStyle"-->
+    <!--android:minHeight="@attr/actionBarSize"-->
+    <!--android:theme="@attr/actionBarTheme"-->
+    <!--<Button-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:text="Force Crash!"-->
+        <!--android:onClick="forceCrash"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
+
 
 </RelativeLayout>

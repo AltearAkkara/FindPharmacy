@@ -55,11 +55,11 @@ public class HorizontalPagerFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setCOmponent(view);
+        setComponent(view);
 
     }
 
-    private void setCOmponent(View view){
+    private void setComponent(View view){
         floatingActionButtonSearch = (FloatingActionButton)view.findViewById(R.id.actionSearch);
         floatingActionButtonCreate = (FloatingActionButton)view.findViewById(R.id.actionAdd);
         floatingActionButtonSearch.setOnClickListener(new View.OnClickListener() {

@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.atoz.akkaratanapat.daogenerator.DaoMaster;
 import com.atoz.akkaratanapat.daogenerator.DaoSession;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 
 //import com.crashlytics.android.Crashlytics;
@@ -23,6 +25,7 @@ public class GreenDaoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         //Fabric.with(this, new Crashlytics());
         setupDatabase();
     }

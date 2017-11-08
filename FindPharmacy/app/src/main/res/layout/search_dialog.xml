@@ -31,6 +31,17 @@
                 android:layout_weight="3"
                 android:background="@color/colorPrimaryPin">
 
+                <!--<TextView-->
+                    <!--android:id="@+id/messageDialogTitle"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="80dp"-->
+                    <!--android:layout_gravity="center_vertical|center_horizontal"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textSize="25sp"-->
+                    <!--android:text="Search">-->
+
+                <!--</TextView>-->
+
                 <com.cengalabs.flatui.views.FlatTextView
                     android:id="@+id/messageDialogTitle"
                     android:layout_width="match_parent"
@@ -58,7 +69,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
@@ -73,7 +84,7 @@
                     android:maxLines="1"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:hint="\tPharmacy name"
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
@@ -82,19 +93,56 @@
                     app:fl_theme="@array/grass" />
 
                 <com.cengalabs.flatui.views.FlatEditText
-                    android:id="@+id/addressEditText"
+                    android:id="@+id/pharmacyAddressEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:hint="\tPharmacy address"
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
                     app:fl_fieldStyle="fl_box"
                     app:fl_theme="@array/grass" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    >
+                    <com.cengalabs.flatui.views.FlatEditText
+                        android:id="@+id/addressEditTextProvince"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:hint="\tProvince"
+                        android:layout_marginEnd="15dp"
+                        app:fl_fieldStyle="fl_box"
+                        app:fl_theme="@array/grass" />
+
+                    <com.cengalabs.flatui.views.FlatEditText
+                        android:id="@+id/addressEditTextDistrict"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:hint="\tDistrict"
+                        app:fl_fieldStyle="fl_box"
+                        app:fl_theme="@array/grass" />
+
+                </LinearLayout>
+
 
 
                 <LinearLayout
@@ -113,9 +161,9 @@
                         android:maxLines="1"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:hint="\tlat"
-                        android:text="0"
+                        android:text="\t0"
                         android:layout_marginEnd="15dp"
                         app:fl_fieldStyle="fl_box"
                         app:fl_theme="@array/grass" />
@@ -127,9 +175,9 @@
                         android:maxLines="1"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:hint="\tlng"
-                        android:text="0"
+                        android:text="\t0"
                         app:fl_fieldStyle="fl_box"
                         app:fl_theme="@array/grass" />
                 </LinearLayout>
@@ -144,7 +192,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:hint="\tPharmacy tel no."
                     app:fl_fieldStyle="fl_box"
                     app:fl_theme="@array/grass" />
@@ -156,7 +204,7 @@
                     android:maxLines="1"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:hint="\tPharmacy owner name"
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
@@ -183,7 +231,7 @@
                         android:layout_gravity="center_vertical|center_horizontal"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:text="Cancel"
                         app:fl_textColor="fl_main"
                         app:fl_theme="@array/grass" />
@@ -196,7 +244,7 @@
                         android:layout_gravity="center_vertical|center_horizontal"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:text="OK"
                         app:fl_textColor="fl_main"
                         app:fl_theme="@array/grass"  />

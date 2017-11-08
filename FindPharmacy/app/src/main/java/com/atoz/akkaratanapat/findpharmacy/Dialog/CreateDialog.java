@@ -44,7 +44,10 @@ public class CreateDialog {
         FlatTextView cancelDialog = (FlatTextView) dialog.findViewById(R.id.cancelDialog);
 
         final FlatEditText name = (FlatEditText)dialog.findViewById(R.id.pharmacyEditText);
-        final FlatEditText address = (FlatEditText)dialog.findViewById(R.id.addressEditText);
+        final FlatEditText address = (FlatEditText)dialog.findViewById(R.id.pharmacyAddressEditText);
+
+        final FlatEditText addressProvince = (FlatEditText)dialog.findViewById(R.id.addressEditTextProvince);
+        final FlatEditText addressDistrict = (FlatEditText)dialog.findViewById(R.id.addressEditTextDistrict);
         final FlatEditText lat = (FlatEditText)dialog.findViewById(R.id.latEditText);
         final FlatEditText lng = (FlatEditText)dialog.findViewById(R.id.lngEditText);
         final FlatEditText tel = (FlatEditText)dialog.findViewById(R.id.telEditText);
@@ -58,14 +61,14 @@ public class CreateDialog {
         okDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name.getText().toString().length() == 0 | address.getText().toString().length() == 0|
-                        lat.getText().toString().length() == 0|lng.getText().toString().length() == 0|
-                        tel.getText().toString().length() == 0|owner.getText().toString().length() == 0){
+                if(name.getText().toString().length() == 0 | addressProvince.getText().toString().length() == 0|
+                        addressDistrict.getText().toString().length() == 0|lat.getText().toString().length() == 0|
+                        lng.getText().toString().length() == 0| tel.getText().toString().length() == 0|owner.getText().toString().length() == 0){
                     Toast.makeText(context,"Please fill all parameter",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    listener.onSubmit("Create",new MyPharmacy(name.getText().toString(),
-                            address.getText().toString(),
+                    listener.onSubmit("Create",new MyPharmacy(name.getText().toString(),address.getText().toString(),
+                            addressProvince.getText().toString(),addressDistrict.getText().toString(),
                             new LatLng(Double.parseDouble(lat.getText().toString()),
                                     Double.parseDouble(lng.getText().toString())),
                             tel.getText().toString(),owner.getText().toString()));

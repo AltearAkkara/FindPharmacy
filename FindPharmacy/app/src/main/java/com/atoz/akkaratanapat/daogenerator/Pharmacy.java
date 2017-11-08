@@ -17,6 +17,8 @@ public class Pharmacy {
     private Long id;
     private String name;
     private String address;
+    private String province;
+    private String district;
     private Double lat;
     private Double lng;
     private String number;
@@ -34,10 +36,12 @@ public class Pharmacy {
     }
 
     @Generated
-    public Pharmacy(Long id, String name, String address, Double lat, Double lng, String number, String owner) {
+    public Pharmacy(Long id, String name, String address, String province, String district, Double lat, Double lng, String number, String owner) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.province = province;
+        this.district = district;
         this.lat = lat;
         this.lng = lng;
         this.number = number;
@@ -66,6 +70,22 @@ public class Pharmacy {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
     public Double getLat() {

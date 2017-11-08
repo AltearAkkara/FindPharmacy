@@ -47,6 +47,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         //holder.header.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         holder.textName.setTag(position);
         if(dataSet.get(position).getType() == 1){
+            holder.header.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
             holder.textName.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
             holder.textAddress.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
             holder.textNumber.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryPin));
@@ -56,6 +57,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.textName.setText(dataSet.get(position).getPharmacy().getNamePharmacy());
         if(dataSet.get(position).getPharmacy().getAddress().length() > 19){
             holder.textAddress.setText(dataSet.get(position).getPharmacy().getAddress().substring(0,20) + "...");
+        }else{
+            holder.textAddress.setText(dataSet.get(position).getPharmacy().getAddress());
         }
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);

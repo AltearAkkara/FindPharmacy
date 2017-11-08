@@ -60,7 +60,7 @@ public class APIHandle {
     public void requestNearbyPlace(double lat, double lng, int rad) {
         JSONObject params = new JSONObject();
         String url = BASE_URL + "nearbysearch/json?location=" + lat +
-                "," + lng + "&radius=" + rad + "&types=pharmacy&keyword=cruise&key=" + API_PLACE_KEY;
+                "," + lng + "&radius=" + rad + "&types=pharmacy&keyword=cruise&language=th&key=" + API_PLACE_KEY;
         try {
 
             postRequest(APIName.Nearby.toString(), url, params.toString(), false);
@@ -73,7 +73,7 @@ public class APIHandle {
 
     public void requestPlaceDetail(int index, String id) {
         JSONObject params = new JSONObject();
-        String url = BASE_URL + "details/json?placeid=" + id + "&key=" + API_PLACE_KEY;
+        String url = BASE_URL + "details/json?placeid=" + id + "&language=th&key=" + API_PLACE_KEY;
         try {
 
             postRequest(index,APIName.Detail.toString(), url, params.toString(), false);
